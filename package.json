@@ -1,0 +1,46 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.1",
+    "morgan": "^1.10.0",
+    "pm2": "^5.2.2"
+  },
+  "name": "server",
+  "description": "Colorgradient app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
+    "watch": "cross-env NODE_ENV=development nodemon index.js",
+    "build:ui": "rm -rf build && cd ../../../client/build && npm run build && cp -r build ../../../server",
+    "deploy": "git push heroku master",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint .",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit",
+    "prod": "NODE_ENV=production nodemon backend/server.js",
+    "cluster": "pm2 start index.js -i max"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechGiovanni/ColorsGradient.git"
+  },
+  "author": "Giovanni reid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TechGiovanni/ColorsGradient/issues"
+  },
+  "homepage": "https://github.com/TechGiovanni/ColorsGradient#readme",
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
