@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-require('dotenv').config()
+// require('dotenv').config()
+const config = require('./utils/config')
 const cors = require('cors')
 const colors = require('colors')
 const path = require('path') // for react the build middleware
