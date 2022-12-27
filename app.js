@@ -96,7 +96,7 @@ app.use(cors({ origin: 'http://localhost:3000' }))
 
 app.use(morgan('combined'))
 
-app.use(express.static(path.join(__dirname, 'public')))
+// app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json({ limit: '30mb', extended: true }))
 app.use(express.urlencoded({ limit: '30mb', extended: true }))
 
@@ -165,8 +165,8 @@ app.post('/api/v1/colors', async (req, res) => {
 // Check if user is logged in Middleware
 const checkLoggedIn = (req, res, next) => {
 	console.log('Current User is', req.user)
-	const isloggedIn = req.isAuthenticated() && req.user
-	if (!isloggedIn) {
+	const isLoggedIn = req.isAuthenticated() && req.user
+	if (!isLoggedIn) {
 		return res.status(404).send("You're not LoggedIn, Please Login or signUp!")
 	}
 
@@ -177,9 +177,9 @@ app.get('/api/v1/users', async (req, res) => {
 })
 // The dashboard of the application
 // GET localhost:3001/dashboard
-app.get('/dashboard', checkLoggedIn, (req, res) => {
-	res.sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+// app.get('/dashboard', checkLoggedIn, (req, res) => {
+// 	res.sendFile(path.join(__dirname, 'public', 'index.html'))
+// })
 
 // React view returned att localhost:3001
 // GET homepage
