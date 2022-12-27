@@ -2,12 +2,11 @@ const fs = require('fs')
 const https = require('https')
 const app = require('./app') //Express application
 
-require('dotenv').config() // the actual Express application
+require('dotenv').config()
 
 const { PORT, MONGODB_URI } = require('./Utils/config')
 // require('colors')
 const mongoose = require('mongoose')
-// const config = require('./Utils/config')
 
 const environment = process.env.NODE_ENV
 

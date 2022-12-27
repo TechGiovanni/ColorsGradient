@@ -18,7 +18,7 @@ const colorSchema = new mongoose.Schema(
 	}
 )
 
-userSchema.set('toJSON', {
+colorSchema.set('toJSON', {
 	transform: (document, returnedObject) => {
 		returnedObject.id = returnedObject._id.toString()
 		delete returnedObject._id

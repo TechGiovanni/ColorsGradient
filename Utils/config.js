@@ -12,9 +12,15 @@ const MONGODB_URI =
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 
+// Session Keys
+const COOKIE_KEY_1 = process.env.COOKIE_KEY_1
+const COOKIE_KEY_2 = process.env.COOKIE_KEY_2
+
 module.exports = {
 	MONGODB_URI,
 	PORT,
 	CLIENT_ID,
 	CLIENT_SECRET,
+	COOKIE_KEY_1,
+	COOKIE_KEY_2,
 }
