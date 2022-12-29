@@ -16,6 +16,9 @@ const {
 const cookieSession = require('cookie-session')
 const UserModel = require('./Models/user.model')
 
+const usersRouter = require('./Routes/usersRouter')
+const colorsRouter = require('./Routes/colorsRouter')
+
 async function verifyCallback(accessToken, refreshToken, profile, done) {
 	console.log('google profile', profile.emails[0].value)
 	console.log('accessToken', accessToken)
@@ -132,7 +135,13 @@ app.get('/failure', (req, res) => {
 	res.send('Failed to log in.')
 	// res.send("<button><a href='/auth/logout'>logout</a></button>")
 })
-// TODO LOGIN SECTION END
+
+app.get('/auth/loginUser', (req, res) => {
+	res.json()
+})
+app.post('/auth/loginUser', (req, res) => {})
+app.get('/auth/registerUser', (req, res) => {})
+app.post('/auth/registerUser', (req, res) => {})
 
 // ROUTES
 // app.use('/api/notes', notesRouter) example
@@ -161,8 +170,7 @@ const checkLoggedIn = (req, res, next) => {
 	}
 	next()
 }
-const usersRouter = require('./Routes/usersRouter')
-const colorsRouter = require('./Routes/colorsRouter')
+
 // ?? TODO ROUTES SECTION START
 // User Routes
 app.use('/api/v1/users', usersRouter)

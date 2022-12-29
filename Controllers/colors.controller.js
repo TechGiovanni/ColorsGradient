@@ -11,7 +11,7 @@ const getAllColors = async (req, res) => {
 // @Method   GET
 // @Route    /api/v1/colors
 const postColor = async (req, res) => {
-	console.log('request Body', req.body.colorCodes)
+	// console.log('request Body', req.body.colorCodes)
 	const newColor = {
 		colorCodes: req.body.colorCodes,
 	}
@@ -19,7 +19,13 @@ const postColor = async (req, res) => {
 	return res.json(color)
 }
 
+// @Desc     Post Colors
+// @Method   GET
+// @Route    /api/v1/colors/:id
+const updateColors = () => {}
+
 module.exports = {
 	getAllColors,
 	postColor,
+	updateColors,
 }
