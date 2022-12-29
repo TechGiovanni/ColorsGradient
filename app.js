@@ -15,7 +15,6 @@ const {
 } = require('./Utils/config')
 const cookieSession = require('cookie-session')
 const UserModel = require('./Models/user.model')
-const ColorModel = require('./Models/color.model')
 
 async function verifyCallback(accessToken, refreshToken, profile, done) {
 	console.log('google profile', profile.emails[0].value)
@@ -35,7 +34,6 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
 		image: profile.photos[0].value,
 	} // this will give us the new user
 
-	//
 	try {
 		// we want to try to store the user.
 		let user = await UserModel.findOne({ googleId: profile.id }) // to see if that user exists already
@@ -136,58 +134,60 @@ app.get('/failure', (req, res) => {
 })
 // TODO LOGIN SECTION END
 
-// TODO COLOR SECTION START
-// get all colors from the database
-// create colors in the database
-
-app.get('/api/v1/colors', async (req, res) => {
-	res.json(await ColorModel.find({}))
-})
-// Post request to create colors to be displayed
-app.post('/api/v1/colors', async (req, res) => {
-	console.log('request Body', req.body.colorCodes)
-	const newColor = {
-		colorCodes: req.body.colorCodes,
-	}
-	color = await ColorModel.create(newColor)
-	return res.json(color)
-})
-
-// TODO  COLOR SECTION END
-
 // ROUTES
 // app.use('/api/notes', notesRouter) example
 // app.get('/', (req, res) => {
 // 	app.send('<H1>Welcome</H1>')
 // })
 //
-// Protection MiddleWares
-// Check if user is logged in Middleware
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// Protection MiddleWare: Check if user is logged in Middleware
 const checkLoggedIn = (req, res, next) => {
 	console.log('Current User is', req.user)
 	const isLoggedIn = req.isAuthenticated() && req.user
+
 	if (!isLoggedIn) {
 		return res.status(404).send("You're not LoggedIn, Please Login or signUp!")
 	}
-
 	next()
 }
-app.get('/api/v1/users', async (req, res) => {
-	res.json(await UserModel.find({}))
-})
-// The dashboard of the application
-// GET localhost:3001/dashboard
+const usersRouter = require('./Routes/usersRouter')
+const colorsRouter = require('./Routes/colorsRouter')
+// ?? TODO ROUTES SECTION START
+// User Routes
+app.use('/api/v1/users', usersRouter)
+// Color Routes
+app.use('/api/v1/colors', colorsRouter)
+
+//
+// @Desc     The dashboard of the application
+// @Method   GET
+// @Route    https://localhost:3001/dashboard
 app.get('/dashboard', checkLoggedIn, (req, res) => {
 	res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
-// React view returned att localhost:3001
-// GET homepage
+// @Desc    React Homepage returned at localhost:3001
+// @Method  GET
+// @Route    https://localhost:3001/
 app.get('/*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public', 'index.html'))
+	// res.sendFile(path.join(__dirname, 'public', 'index.html'))
+	res.status(404).end()
 })
 
-// unknown Route Handler
+// @Desc    unknown Route Handler
+// @Method  GET
+// @Route    /something
 const unknownEndpoint = (request, response) => {
 	response.status(404).send({ error: 'unknown endpoint' })
 }
