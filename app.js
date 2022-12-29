@@ -18,6 +18,7 @@ const UserModel = require('./Models/user.model')
 
 const usersRouter = require('./Routes/usersRouter')
 const colorsRouter = require('./Routes/colorsRouter')
+const authRouter = require('./Routes/authRouter')
 
 async function verifyCallback(accessToken, refreshToken, profile, done) {
 	console.log('google profile', profile.emails[0].value)
@@ -57,12 +58,13 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
 	}
 }
 
+// calls the verify callback function above
 passport.use(
 	new Strategy(
 		{
 			clientID: CLIENT_ID,
 			clientSecret: CLIENT_SECRET,
-			callbackURL: '/auth/google/callback',
+			callbackURL: '/api/v1/auth/google/callback',
 		},
 		verifyCallback
 	)
@@ -81,7 +83,7 @@ passport.deserializeUser((id, done) => {
 	// done(null, id)
 })
 
-// Middleware
+// Middleware - Cookie session to 30 days
 app.use(helmet())
 app.use(
 	cookieSession({
@@ -101,65 +103,18 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json({ limit: '30mb', extended: true }))
 app.use(express.urlencoded({ limit: '30mb', extended: true }))
 
-// TODO LOGIN USER SECTION START
-// Starting the google Flow
-app.get(
-	'/auth/google',
-	passport.authenticate('google', {
-		scope: ['email', 'profile'],
-	})
-) // login with google
+// TODO API SECTION START
 
-// Google callback
-app.get(
-	'/auth/google/callback',
-	passport.authenticate('google', {
-		failureRedirect: '/failure',
-		successRedirect: '/dashboard',
-		session: true,
-	}),
-	(req, res) => {
-		console.log('Google called us back')
-		// res.redirect('/dashboard')
-	}
-) // login redirect from google
+// ** MAIN API ROUTES SECTION START
+// User Routes
+app.use('/api/v1/users', usersRouter)
+// Color Routes
+app.use('/api/v1/colors', colorsRouter)
+// Login Users with google or email
+app.use('/api/v1/auth', authRouter)
+//
+// ** MAIN API ROUTES SECTION END
 
-// Logging Out a User
-app.get('/auth/logout', (req, res) => {
-	req.logout() // removes req.user and clears any logged in session
-	return res.redirect('/')
-})
-
-// View If authentication with google fails
-app.get('/failure', (req, res) => {
-	res.send('Failed to log in.')
-	// res.send("<button><a href='/auth/logout'>logout</a></button>")
-})
-
-app.get('/auth/loginUser', (req, res) => {
-	res.json()
-})
-app.post('/auth/loginUser', (req, res) => {})
-app.get('/auth/registerUser', (req, res) => {})
-app.post('/auth/registerUser', (req, res) => {})
-
-// ROUTES
-// app.use('/api/notes', notesRouter) example
-// app.get('/', (req, res) => {
-// 	app.send('<H1>Welcome</H1>')
-// })
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 // Protection MiddleWare: Check if user is logged in Middleware
 const checkLoggedIn = (req, res, next) => {
 	console.log('Current User is', req.user)
@@ -170,14 +125,6 @@ const checkLoggedIn = (req, res, next) => {
 	}
 	next()
 }
-
-// ?? TODO ROUTES SECTION START
-// User Routes
-app.use('/api/v1/users', usersRouter)
-// Color Routes
-app.use('/api/v1/colors', colorsRouter)
-
-//
 // @Desc     The dashboard of the application
 // @Method   GET
 // @Route    https://localhost:3001/dashboard
@@ -185,16 +132,17 @@ app.get('/dashboard', checkLoggedIn, (req, res) => {
 	res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
-// @Desc    React Homepage returned at localhost:3001
-// @Method  GET
+// ** ERROR HANDLING API ROUTES SECTION START
+// @Desc     React Homepage returned at localhost:3001
+// @Method   GET
 // @Route    https://localhost:3001/
 app.get('/*', (req, res) => {
 	// res.sendFile(path.join(__dirname, 'public', 'index.html'))
 	res.status(404).end()
 })
 
-// @Desc    unknown Route Handler
-// @Method  GET
+// @Desc     unknown Route Handler
+// @Method   GET
 // @Route    /something
 const unknownEndpoint = (request, response) => {
 	response.status(404).send({ error: 'unknown endpoint' })
