@@ -1,12 +1,30 @@
 const usersRouter = require('express').Router()
 
-const { getAllUsers, currentUser } = require('../Controllers/users.controller')
+const {
+	getAllUsers,
+	currentUser,
+	loginUser,
+	registerUser,
+} = require('../Controllers/users.controller')
 
-// userRouter.get('/api/v1/users', async (req, res) => {
-// 	res.json(await UserModel.find({}))
-// })
-
+// @Desc    get all Users
+// @Method  GET
+// @Route   /api/v1/users
 usersRouter.get('/', getAllUsers)
+
+// @Desc    get the current User that's logged in
+// @Method  GET
+// @Route   /api/v1/users/current
 usersRouter.get('/current', currentUser)
+
+// @Desc    login a user with email and password
+// @Method  POST
+// @Route   /api/v1/users/login
+usersRouter.post('/login', loginUser)
+
+// @Desc    register/create a user with email and password
+// @Method  POST
+// @Route   /api/v1/users
+usersRouter.post('/', registerUser)
 
 module.exports = usersRouter

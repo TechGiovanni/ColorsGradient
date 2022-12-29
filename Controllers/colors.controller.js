@@ -22,7 +22,9 @@ const postColor = async (req, res) => {
 // @Desc     Post Colors
 // @Method   GET
 // @Route    /api/v1/colors/:id
-const updateColors = () => {}
+const updateColors = async (id) => {
+	// const color = await Color.findById({ id })
+}
 
 module.exports = {
 	getAllColors,

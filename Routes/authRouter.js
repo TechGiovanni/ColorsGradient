@@ -1,6 +1,5 @@
 const authRouter = require('express').Router()
 const passport = require('passport')
-const UserModel = require('../Models/user.model')
 
 const {
 	LoginUsers,
@@ -10,20 +9,7 @@ const {
 	failedAuthDisplay,
 } = require('../Controllers/auth.controller')
 
-// @Desc    Login a user with email
-// @Route   /api/v1/auth/loginUser
-authRouter.get('/loginUser', LoginUsers)
-// authsRouter.post('/loginUser', (req, res) => {})
-// authsRouter.get('/registerUser', (req, res) => {})
-// authsRouter.post('/registerUser', (req, res) => {})
-
-//
-//
-//
-//
-//
-//
-// ** GOOGLE LOGIN SECTION START
+// ?? GOOGLE LOGIN SECTION START
 // @Desc    Starts the google Flow
 // @Route   /api/v1/auth/google
 authRouter.get('/google', googleLogin)

@@ -1,26 +1,5 @@
-const UserModel = require('../Models/user.model')
 const passport = require('passport')
 
-// TODO Email and Password Login Start
-
-// @Desc     Display the current User
-// @Method   GET
-// @Route    /api/v1/auth/loginUser
-const LoginUsers = (req, res) => {
-	res.json()
-}
-
-// @Desc     verify that the user is in the database
-// @Method   POST
-// @Route    /api/v1/auth/loginUser
-const LoginUser = (req, res) => {
-	res.json()
-}
-// TODO Email and Password Login End
-//
-//
-//
-//
 // ** GOOGLE LOGIN SECTION START
 // @Desc     Logs the user into the application
 // @Method   GET
@@ -29,7 +8,6 @@ const googleLogin = passport.authenticate('google', {
 	scope: ['email', 'profile'],
 })
 
-//
 // @Desc     redirect to dashboard, Google callback
 // @Method   GET
 // @Route    /api/v1/auth/google/callback
@@ -54,7 +32,6 @@ const failedAuthDisplay = (req, res) => {
 }
 
 module.exports = {
-	LoginUsers,
 	googleLogin,
 	googleCallBack,
 	logoutUser,

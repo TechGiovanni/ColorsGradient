@@ -110,7 +110,7 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }))
 app.use('/api/v1/users', usersRouter)
 // Color Routes
 app.use('/api/v1/colors', colorsRouter)
-// Login Users with google or email
+// Social Signup & Login with google
 app.use('/api/v1/auth', authRouter)
 //
 // ** MAIN API ROUTES SECTION END
