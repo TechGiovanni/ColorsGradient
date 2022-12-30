@@ -5,15 +5,18 @@ const userSchema = new mongoose.Schema(
 		firstName: {
 			type: String,
 			required: [true, 'Please add your first name'],
+			trim: true, // trim any white space
 		},
 		lastName: {
 			type: String,
 			required: [true, 'Please add your last name'],
+			trim: true,
 		},
 		email: {
 			type: String,
 			required: [true, 'Please add a email'],
 			unique: true,
+			trim: true,
 		},
 		password: {
 			type: String,

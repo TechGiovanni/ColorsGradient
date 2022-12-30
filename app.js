@@ -19,6 +19,7 @@ const UserModel = require('./Models/user.model')
 const usersRouter = require('./Routes/usersRouter')
 const colorsRouter = require('./Routes/colorsRouter')
 const authRouter = require('./Routes/authRouter')
+const userModel = require('./Models/user.model')
 
 async function verifyCallback(accessToken, refreshToken, profile, done) {
 	console.log('google profile', profile.emails[0].value)
@@ -116,13 +117,15 @@ app.use('/api/v1/auth', authRouter)
 // ** MAIN API ROUTES SECTION END
 
 // Protection MiddleWare: Check if user is logged in Middleware
-const checkLoggedIn = (req, res, next) => {
-	console.log('Current User is', req.user)
-	const isLoggedIn = req.isAuthenticated() && req.user
+const checkLoggedIn = async (req, res, next) => {
+	// console.log('Current User is', req.user)
+	// console.log('Current User is', req.body)
+	// const isLoggedIn = req.isAuthenticated() && req.user
+	// const user = await userModel.find({})
 
-	if (!isLoggedIn) {
-		return res.status(404).send("You're not LoggedIn, Please Login or signUp!")
-	}
+	// if (!isLoggedIn) {
+	// 	return res.status(404).send("You're not LoggedIn, Please Login or signUp!")
+	// }
 	next()
 }
 // @Desc     The dashboard of the application
