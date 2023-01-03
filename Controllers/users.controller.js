@@ -12,8 +12,9 @@ async function getAllUsers(req, res) {
 // @Desc     Display the current User
 // @Method   GET
 // @Route    /api/v1/users/current
-const currentUser = (req, res) => {
-	res.json(req.user)
+function currentUser(req, res) {
+	let Cuser = req.user
+	res.status(200).json({ user: Cuser })
 }
 
 // TODO Email and Password Login Start
@@ -21,7 +22,7 @@ const currentUser = (req, res) => {
 // @Desc    login a user with email and password
 // @Method  POST
 // @Route   /api/v1/users/login
-const loginUser = (req, res) => {
+function loginUser(req, res) {
 	// console.log('Request data', req.body)
 	res.json({ message: 'hello' })
 }
@@ -81,14 +82,19 @@ async function registerUser(req, res) {
 				// newUser.password = hashedPassword
 
 				// save the newUser to the database
-				await newUser
+				newUser
 					.save()
 					.then((userSaved) => {
 						console.log(req.body)
 						console.log('user', userSaved)
 						// if the user gets saved we want to redirect to the login page
 						// res.redirect('/dashboard')
-						res.send('/dashboard')
+						req.login(newUser, function (err) {
+							if (err) {
+								return next(err)
+							}
+							return res.status(301).redirect('/dashboard')
+						})
 					})
 					.catch((err) => {
 						console.log('Error Saving newUser:', err)

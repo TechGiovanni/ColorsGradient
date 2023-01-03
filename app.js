@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const fs = require('fs')
 // require('colors')
 const cors = require('cors')
 const path = require('path') // for react the build middleware
@@ -19,7 +20,18 @@ const UserModel = require('./Models/user.model')
 const usersRouter = require('./Routes/usersRouter')
 const colorsRouter = require('./Routes/colorsRouter')
 const authRouter = require('./Routes/authRouter')
-const userModel = require('./Models/user.model')
+
+const file = fs.readFileSync(
+	path.join(__dirname, '6A8E190099A04DFC7373B5062DE0AC12.txt')
+)
+app.get(
+	'/.well-known/pki-validation/6A8E190099A04DFC7373B5062DE0AC12.txt',
+	(req, res) => {
+		res.sendFile(
+			'/Users/giovanni/Desktop/ColorGradient/server/6A8E190099A04DFC7373B5062DE0AC12.txt'
+		)
+	}
+)
 
 async function verifyCallback(accessToken, refreshToken, profile, done) {
 	console.log('google profile', profile.emails[0].value)
@@ -31,12 +43,12 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
 	// done(null, profile)
 	// Adding the user to the Mongo database
 	const newUser = {
-		name: profile.displayName,
+		// name: profile.displayName,
 		email: profile.emails[0].value,
 		googleId: profile.id,
 		firstName: profile.name.givenName,
 		lastName: profile.name.familyName,
-		image: profile.photos[0].value,
+		// image: profile.photos[0].value,
 	} // this will give us the new user
 
 	try {
@@ -73,11 +85,15 @@ passport.use(
 
 // Saving the session to the cookie
 passport.serializeUser((user, done) => {
+	// A login session is established upon a user successfully authenticating
+	// If successfully verified, Passport will call the serializeUser function, which in the above example is storing the user's ID, username, and picture to the cookie.
 	done(null, user.id)
 })
 
 // Reading the session from the cookie
 passport.deserializeUser((id, done) => {
+	// When the session is authenticated, Passport will call the deserializeUser function, which in the above example is yielding the previously stored user ID, username, and picture. The req.user property is then set to the yielded information.
+
 	UserModel.findById(id).then((user) => {
 		done(null, user)
 	})
@@ -89,7 +105,7 @@ app.use(helmet())
 app.use(
 	cookieSession({
 		name: 'session',
-		maxAge: 30 * 24 * 60 * 60 * 1000,
+		maxAge: 2 * 24 * 60 * 60 * 1000,
 		keys: [COOKIE_KEY_1, COOKIE_KEY_2],
 	})
 )
@@ -118,14 +134,14 @@ app.use('/api/v1/auth', authRouter)
 
 // Protection MiddleWare: Check if user is logged in Middleware
 const checkLoggedIn = async (req, res, next) => {
-	// console.log('Current User is', req.user)
-	// console.log('Current User is', req.body)
-	// const isLoggedIn = req.isAuthenticated() && req.user
-	// const user = await userModel.find({})
+	console.log('Current User is', req.user)
+	console.log('Current User is', req.body)
+	const isLoggedIn = req.isAuthenticated() && req.user
+	const user = await UserModel.find({})
 
-	// if (!isLoggedIn) {
-	// 	return res.status(404).send("You're not LoggedIn, Please Login or signUp!")
-	// }
+	if (!isLoggedIn) {
+		return res.status(404).send("You're not LoggedIn, Please Login or signUp!")
+	}
 	next()
 }
 // @Desc     The dashboard of the application
@@ -140,8 +156,8 @@ app.get('/dashboard', checkLoggedIn, (req, res) => {
 // @Method   GET
 // @Route    https://localhost:3001/
 app.get('/*', (req, res) => {
-	// res.sendFile(path.join(__dirname, 'public', 'index.html'))
-	res.status(404).end()
+	res.sendFile(path.join(__dirname, 'public', 'index.html'))
+	// res.status(404).end()
 })
 
 // @Desc     unknown Route Handler
