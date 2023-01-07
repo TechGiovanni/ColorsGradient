@@ -12,8 +12,8 @@ const environment = process.env.NODE_ENV
 
 const server = https.createServer(
 	{
-		key: fs.readFileSync('key.pem'),
-		cert: fs.readFileSync('cert.pem'),
+		key: fs.readFileSync('private.key'),
+		cert: fs.readFileSync('certificate.crt'),
 	},
 	app
 )

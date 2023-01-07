@@ -5,3 +5,5 @@ key.pem
 logs.txt
 key-pairs
 6A8E190099A04DFC7373B5062DE0AC12.txt
+private.key
+certificate.crt

@@ -4,7 +4,7 @@ const passport = require('passport')
 const {
 	LoginUsers,
 	logoutUser,
-	googleCallBack,
+	// googleCallBack,
 	googleLogin,
 	failedAuthDisplay,
 } = require('../Controllers/auth.controller')
@@ -16,15 +16,15 @@ authRouter.get('/google', googleLogin)
 
 // @Desc    Google Callback
 // @Route  /api/v1/auth/google/callback
-authRouter.get(
-	'/google/callback',
-	passport.authenticate('google', {
-		failureRedirect: '/failure',
-		successRedirect: '/dashboard',
-		session: true,
-	}),
-	googleCallBack
-)
+// authRouter.get(
+// 	'/google/callback',
+// 	passport.authenticate('google', {
+// 		failureRedirect: '/api/v1/auth/failure',
+// 		successRedirect: '/dashboard',
+// 		session: true,
+// 	}),
+// 	googleCallBack
+// )
 // ** GOOGLE LOGIN SECTION END
 
 // ?? ERROR AND LOGOUT USERS

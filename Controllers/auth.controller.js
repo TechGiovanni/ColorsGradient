@@ -11,9 +11,9 @@ const googleLogin = passport.authenticate('google', {
 // @Desc     redirect to dashboard, Google callback
 // @Method   GET
 // @Route    /api/v1/auth/google/callback
-const googleCallBack = (req, res) => {
-	console.log('Google called us back')
-}
+// const googleCallBack = (req, res) => {
+// 	console.log('Google called us back')
+// }
 // ** GOOGLE LOGIN SECTION END
 
 // ?? ERROR AND LOGOUT USERS
@@ -21,8 +21,16 @@ const googleCallBack = (req, res) => {
 // @Method  GET
 // @Route   /api/v1/auth/logout
 const logoutUser = (req, res) => {
-	req.logout() // removes req.user and clears any logged in session
-	return res.redirect('/')
+	if (req.user) {
+		req.logout()
+		//redirect back to the frontend home page
+		return res.redirect('/')
+	} else {
+		return res.send('User is already logged out!')
+	}
+
+	// req.logout() // removes req.user and clears any logged in session
+	// return res.redirect('/')
 }
 
 // Display View If authentication with google fails
@@ -33,7 +41,7 @@ const failedAuthDisplay = (req, res) => {
 
 module.exports = {
 	googleLogin,
-	googleCallBack,
+	// googleCallBack,
 	logoutUser,
 	failedAuthDisplay,
 }
